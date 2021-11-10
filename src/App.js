@@ -24,18 +24,25 @@ const handleSubmit = (e) => {
     fetchCityData();
   }
   else 
-  fetchTypeData()
+  handleSelect()
 e.target.reset()
 }
 
+const handleSelect = (e) => {
+  console.log(e.target.value)
+  setType(e.target.value)
+  fetchTypeData()
+  setCity('')
+}
+
 async function fetchTypeData() {
-  const response = await fetch(`https://api.openbrewerydb.org/breweries?by_type=micro`);
+  const response = await fetch(`https://api.openbrewerydb.org/breweries?by_type=${type}`);
   const breweries = await  response.json()
   if (type) {
     setBrewery(breweries)
 }
-
 }
+
 
 let breweryByCity = []
 for (let i =0; i < brewery.length; i ++) {
@@ -60,9 +67,14 @@ for (let i =0; i < brewery.length; i ++) {
         <form id='state' onSubmit={handleSubmit}>
         <input type='text' id='state' placeholder='Search By City' onChange={e => setCity(e.target.value)}></input>
         </form>
-        <form id='type' onSubmit={handleSubmit}>
+        {/* <form id='type' onSubmit={handleSubmit}>
         <input type='text' id='type' placeholder='Search By Type' onChange={e => setType(e.target.value)}></input>
-        </form>
+        </form> */}
+        <select onChange={handleSelect} name='selectList' id='selectList'>
+        {typeOfBrewery.map((type, index) => {
+          return <option value={type}>{type}</option>
+        })}
+        </select>
         <br/>
         <h2> List of Breweries</h2>
         <p>{city}</p> 
