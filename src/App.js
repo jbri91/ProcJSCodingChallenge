@@ -6,21 +6,28 @@ function App() {
 
   const [brewery, setBrewery] = useState([])
   const [city, setCity] = useState('')
-  const [type, setType] = useState('')
+  const [type, setType] = useState('micro')
   const typeOfBrewery = ['micro', 'nano', 'regional', 'brewpub', 'large', 'planning', 'bar', 'contract', 'proprieter', 'closed']
+
 
 async function fetchCityData() {
   const response = await fetch(`https://api.openbrewerydb.org/breweries?by_city=${city}`);
   const breweries = await  response.json()
   if (city) {
     setBrewery(breweries)
-}
-}
-console.log('brewery', brewery)
+}}
+
+async function fetchTypeData() {
+  const response = await fetch(`https://api.openbrewerydb.org/breweries?by_type=${type}`);
+  const breweries = await  response.json()
+  if (type) {
+    setBrewery(breweries)
+}}
+
+
 const handleSubmit = (e) => {
   e.preventDefault();
   if (e.target.id == 'state') {
-    setType('')
     fetchCityData();
   }
   else 
@@ -29,33 +36,9 @@ e.target.reset()
 }
 
 const handleSelect = (e) => {
-  console.log(e.target.value)
   setType(e.target.value)
   fetchTypeData()
   setCity('')
-}
-
-async function fetchTypeData() {
-  const response = await fetch(`https://api.openbrewerydb.org/breweries?by_type=${type}`);
-  const breweries = await  response.json()
-  if (type) {
-    setBrewery(breweries)
-}
-}
-
-
-let breweryByCity = []
-for (let i =0; i < brewery.length; i ++) {
-  breweryByCity.push({
-    id: brewery[i].id,
-    name: brewery[i].name,
-    city: brewery[i].city,
-    country: brewery[i].country,
-    phone: brewery[i].phone,
-    state: brewery[i].state,
-    street: brewery[i].street,
-    url: brewery[i].website_url
-  })
 }
 
 const brews = [];
@@ -65,7 +48,7 @@ const brews = [];
     i++
   ) {
     brews.push(
-      <tr key={brewery.name}>
+      <tr key={brewery[i].id}>
         <td>{brewery[i].name}</td>
         <td>{brewery[i].phone}</td>
         <td>{brewery[i].street}</td>
@@ -79,7 +62,7 @@ const brews = [];
 
   return (
     <div className="App">
-      <Navigation/>
+      <Navigation />
       <header className="App-header">
         <form id='state' onSubmit={handleSubmit}>
         <input type='text' id='state' placeholder='Search By City' onChange={e => setCity(e.target.value)}></input>
@@ -92,7 +75,7 @@ const brews = [];
         <br/>
         <h2> List of Breweries</h2>
         <p>{city}</p>
-        <table className='table table-success table-striped' style={{fontSize:'20px', border: 'solid'}}>
+        <table className='table table-success table-striped table-hover' style={{fontSize:'20px', border: 'solid'}}>
           <thead>
             <tr style={{ fontWeight: 'bold', fontSize: '20px'}}>
               <th>Name</th>
