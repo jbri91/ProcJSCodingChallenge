@@ -69,7 +69,7 @@ const brews = [];
         </form>
         <select onChange={handleSelect} name='selectList' id='selectList'>
         {typeOfBrewery.map((type, index) => {
-          return <option value={type}>{type}</option>
+          return <option key={index} value={type}>{type}</option>
         })}
         </select>
         <br/>
