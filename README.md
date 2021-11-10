@@ -1,6 +1,5 @@
 # Installation Instructions
-1. `cd` into the `my-app` directory.
-    1. run `npm install` command
+1. run `npm install` command
 
     
 # Running the Application
