@@ -5,18 +5,37 @@ import './App.css';
 function App() {
 
   const [brewery, setBrewery] = useState([])
-  const [city, setCity] = useState('New York')
-useEffect(() => {
- fetchData();
+  const [city, setCity] = useState('')
+  const [type, setType] = useState('')
+  const typeOfBrewery = ['micro', 'nano', 'regional', 'brewpub', 'large', 'planning', 'bar', 'contract', 'proprieter', 'closed']
 
-}, []) 
-
-async function fetchData() {
-  const response = await fetch('https://api.openbrewerydb.org/breweries?by_city=new_york');
+async function fetchCityData() {
+  const response = await fetch(`https://api.openbrewerydb.org/breweries?by_city=${city}`);
   const breweries = await  response.json()
-  setBrewery(breweries)
+  if (city) {
+    setBrewery(breweries)
+}
 }
 
+const handleSubmit = (e) => {
+  e.preventDefault();
+  if (e.target.id == 'state') {
+    setType('')
+    fetchCityData();
+  }
+  else 
+  fetchTypeData()
+e.target.reset()
+}
+
+async function fetchTypeData() {
+  const response = await fetch(`https://api.openbrewerydb.org/breweries?by_type=micro`);
+  const breweries = await  response.json()
+  if (type) {
+    setBrewery(breweries)
+}
+
+}
 
 let breweryByCity = []
 for (let i =0; i < brewery.length; i ++) {
@@ -38,9 +57,15 @@ for (let i =0; i < brewery.length; i ++) {
     <div className="App">
       <Navigation/>
       <header className="App-header">
-        <input type='text' name='state' placeholder='Search By State' onChange={e => setCity(e.target.value)}></input>
+        <form id='state' onSubmit={handleSubmit}>
+        <input type='text' id='state' placeholder='Search By City' onChange={e => setCity(e.target.value)}></input>
+        </form>
+        <form id='type' onSubmit={handleSubmit}>
+        <input type='text' id='type' placeholder='Search By Type' onChange={e => setType(e.target.value)}></input>
+        </form>
         <br/>
-        <h2> List of Breweries In {city} </h2> 
+        <h2> List of Breweries</h2>
+        <p>{city}</p> 
         {breweryByCity.map(function(b, idx){
           return (
           <li key={idx}>{b.name}</li>
