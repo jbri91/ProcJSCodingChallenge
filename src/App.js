@@ -16,7 +16,7 @@ async function fetchCityData() {
     setBrewery(breweries)
 }
 }
-
+console.log('brewery', brewery)
 const handleSubmit = (e) => {
   e.preventDefault();
   if (e.target.id == 'state') {
@@ -58,7 +58,24 @@ for (let i =0; i < brewery.length; i ++) {
   })
 }
 
-
+const brews = [];
+  for (
+    let i = 0;
+    i < brewery.length;
+    i++
+  ) {
+    brews.push(
+      <tr key={brewery.name}>
+        <td>{brewery[i].name}</td>
+        <td>{brewery[i].phone}</td>
+        <td>{brewery[i].street}</td>
+        <td>{brewery[i].state}</td>
+        <td>{brewery[i].city}</td>
+        <td>{brewery[i].country}</td>
+        <td>{brewery[i].website_url}</td>
+      </tr>
+    );
+  }
 
   return (
     <div className="App">
@@ -67,9 +84,6 @@ for (let i =0; i < brewery.length; i ++) {
         <form id='state' onSubmit={handleSubmit}>
         <input type='text' id='state' placeholder='Search By City' onChange={e => setCity(e.target.value)}></input>
         </form>
-        {/* <form id='type' onSubmit={handleSubmit}>
-        <input type='text' id='type' placeholder='Search By Type' onChange={e => setType(e.target.value)}></input>
-        </form> */}
         <select onChange={handleSelect} name='selectList' id='selectList'>
         {typeOfBrewery.map((type, index) => {
           return <option value={type}>{type}</option>
@@ -77,15 +91,24 @@ for (let i =0; i < brewery.length; i ++) {
         </select>
         <br/>
         <h2> List of Breweries</h2>
-        <p>{city}</p> 
-        {breweryByCity.map(function(b, idx){
-          return (
-          <li key={idx}>{b.name}</li>
-          )
-        })}
+        <p>{city}</p>
+        <table className='table table-success table-striped' style={{fontSize:'20px', border: 'solid'}}>
+          <thead>
+            <tr style={{ fontWeight: 'bold', fontSize: '20px'}}>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Street</th>
+              <th>State</th>
+              <th>City</th>
+              <th>country</th>
+              <th>Website</th>
+            </tr>
+          </thead>
+          <tbody>
+           {brews}
+          </tbody>
+        </table>
       </header>
-      <ul>
-    </ul>
     </div>
   );
 }
